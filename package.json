@@ -9,6 +9,6 @@
   },
   "author": "",
   "dependencies": {
-    "telegraf": "^3.16.0"
+    "telegraf": "^3.16.3"
   }
 }
