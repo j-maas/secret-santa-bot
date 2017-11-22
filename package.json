@@ -1,0 +1,14 @@
+{
+  "name": "secret-santa",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "dependencies": {
+    "telegraf": "^3.16.0"
+  }
+}
