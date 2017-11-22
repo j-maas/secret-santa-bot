@@ -31,12 +31,13 @@ async function catch_error (ctx, next) {
 bot.use(catch_error)
 
 async function listChildren (ctx) {
-  if (matches) {
-    return ctx.reply(`Your child is ${matches[ctx.from.id].first_name}.`)
+  const currentUserId = ctx.from.id
+  if (Object.keys(matches).includes(currentUserId)) {
+    return ctx.reply(`Your child is ${matches[currentUserId].first_name}.`)
   }
 }
 
-bot.start(listChildren)
+bot.start(listChildren, async (ctx) => {if (ctx.chat.type === 'private') return listChildren(ctx)})
 bot.command('child', listChildren)
 
 bot.command('open', (ctx) => {
