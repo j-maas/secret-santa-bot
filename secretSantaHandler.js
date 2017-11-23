@@ -1,4 +1,3 @@
-const util = require('util')
 const Markup = require('telegraf/markup')
 
 class SecretSantaHandler {
@@ -9,32 +8,12 @@ class SecretSantaHandler {
   }
 
   registerToBot (bot) {
-    bot.use(this.log_middleware)
-    bot.use(this.catch_error)
     bot.start(async (ctx) => {if (ctx.chat.type === 'private') return this.listChild(ctx)})
     bot.command('child', this.listChild)
     bot.on('inline_query', ({inlineQuery, answerInlineQuery}) => this.inlineQuery(inlineQuery, answerInlineQuery))
     bot.on('chosen_inline_result', ({chosenInlineResult}) => this.chosenInlineResult(chosenInlineResult))
     bot.action('join', (ctx) => this.join(ctx))
     bot.command('close', (ctx) => this.close(ctx))
-  }
-
-  async log_middleware (ctx, next) {
-    console.log('===================================================')
-    console.log('Incoming:\n', util.inspect(ctx.update, {depth: 5}))
-    console.log('- - - - - - - - - - - - - - - - - - - - - - - - - -')
-    console.log('Outgoing:\n', await next())
-    console.log('===================================================')
-  }
-
-  async catch_error (ctx, next) {
-    let result = null
-    try {
-      result = await next()
-    } catch (e) {
-      console.error(e)
-    }
-    return result
   }
 
   async listChild (ctx) {
