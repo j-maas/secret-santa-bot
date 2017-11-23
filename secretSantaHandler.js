@@ -9,15 +9,15 @@ class SecretSantaHandler {
   }
 
   registerToBot (bot) {
-    bot.start(async (ctx) => {if (ctx.chat.type === 'private') return this.listChild(ctx)})
-    bot.command('child', this.listChild)
+    bot.start(async (ctx) => {if (ctx.chat.type === 'private') return this.childCommand(ctx)})
+    bot.command('child', this.childCommand)
     bot.on('inline_query', ({inlineQuery, answerInlineQuery}) => this.inlineQuery(inlineQuery, answerInlineQuery))
     bot.on('chosen_inline_result', ({chosenInlineResult}) => this.chosenInlineResult(chosenInlineResult))
-    bot.action('join', (ctx) => this.join(ctx))
-    bot.command('close', (ctx) => this.close(ctx))
+    bot.action('join', (ctx) => this.joinAction(ctx))
+    bot.command('close', (ctx) => this.closeCommand(ctx))
   }
 
-  async listChild (ctx) {
+  async childCommand (ctx) {
     const currentUserId = ctx.from.id
     if (Object.keys(this.matches).includes(currentUserId.toString())) {
       return ctx.reply(`Your child is ${this.matches[currentUserId].first_name}.`)
@@ -45,7 +45,7 @@ class SecretSantaHandler {
     this.messages.push(chosenInlineResult.inline_message_id)
   }
 
-  async join (ctx) {
+  async joinAction (ctx) {
     const user = ctx.from
     const same_user_in_list = this.users.filter(user => user.id === ctx.from.id)
     if (same_user_in_list.length === 0) {
@@ -127,7 +127,7 @@ class SecretSantaHandler {
     return matches
   }
 
-  async close (ctx) {
+  async closeCommand (ctx) {
     this.matches = this.match(Array.from(this.users))
 
     await this.updateAllStatusMessages(ctx, true)
