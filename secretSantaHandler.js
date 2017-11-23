@@ -51,8 +51,12 @@ class SecretSantaHandler {
     if (same_user_in_list.length === 0) {
       this.users.push(user)
     }
-    await this.updateStatusMessage(ctx, ctx.callbackQuery.inline_message_id)
+    await this.updateAllStatusMessages(ctx, false)
     return ctx.answerCbQuery()
+  }
+
+  async updateAllStatusMessages(ctx, isClosed) {
+    this.messages.forEach(inline_message_id => this.updateStatusMessage(ctx, inline_message_id, isClosed))
   }
 
   async updateStatusMessage (ctx, inline_message_id, isClosed) {
@@ -71,9 +75,15 @@ class SecretSantaHandler {
     }
   }
 
+  getUsersList() {
+    return this.users.map(user => '\t - ' + user.first_name).join('\n')
+  }
+
   getStatusMessage (isClosed) {
+    const intro = isClosed ? 'Done! The secret santa circle is now closed and has the following members:\n'
+      : 'The secret santa circle has the following members:\n'
     return {
-      messageText: 'The secret santa circle has the following members:\n\n' + this.users.map(user => '\t - ' + user.first_name).join('\n'),
+      messageText: intro +  this.getUsersList(),
       markup: isClosed ? Markup.inlineKeyboard([Markup.urlButton('See your child', 'https://telegram.me/Y0hy0hTestBot?start=child')])
         : Markup.inlineKeyboard([Markup.callbackButton('Join', 'join')]),
     }
@@ -104,7 +114,8 @@ class SecretSantaHandler {
   async close (ctx) {
     this.matches = this.match(Array.from(this.users))
 
-    this.messages.forEach(inline_message_id => this.updateStatusMessage(ctx, inline_message_id, true))
+    await this.updateAllStatusMessages(ctx, true)
+    ctx.reply("Closed the circle with members:\n" + this.getUsersList())
   }
 }
 
