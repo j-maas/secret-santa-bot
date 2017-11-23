@@ -1,6 +1,6 @@
 const Telegraf = require('telegraf')
 const util = require('util')
-const {SecretSantaHandler} = require('./secretSantaHandler')
+const {SecretSantaHandler} = require('./src/secretSantaHandler')
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
 

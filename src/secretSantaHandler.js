@@ -75,6 +75,16 @@ class SecretSantaHandler {
     }
   }
 
+  getStatusMessage (isClosed) {
+    const intro = isClosed ? `Done! The secret santa circle is now closed and has the following ${this.users.length} members:\n`
+      : `The secret santa circle has the following ${this.users.length} members:\n`
+    return {
+      messageText: intro +  this.getUsersList(),
+      markup: isClosed ? Markup.inlineKeyboard([Markup.urlButton('See your child', 'https://telegram.me/Y0hy0hTestBot?start=child')])
+        : Markup.inlineKeyboard([Markup.callbackButton('Join', 'join')]),
+    }
+  }
+
   getUsersList() {
     return this.users.map(user => `\t - ${this.getUserName(user)}`).join('\n')
   }
@@ -92,16 +102,6 @@ class SecretSantaHandler {
       }
     }
     return output
-  }
-
-  getStatusMessage (isClosed) {
-    const intro = isClosed ? `Done! The secret santa circle is now closed and has the following ${this.users.length} members:\n`
-      : `The secret santa circle has the following ${this.users.length} members:\n`
-    return {
-      messageText: intro +  this.getUsersList(),
-      markup: isClosed ? Markup.inlineKeyboard([Markup.urlButton('See your child', 'https://telegram.me/Y0hy0hTestBot?start=child')])
-        : Markup.inlineKeyboard([Markup.callbackButton('Join', 'join')]),
-    }
   }
 
   shuffle (array) {
