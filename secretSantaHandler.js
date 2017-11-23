@@ -90,6 +90,7 @@ class SecretSantaHandler {
   }
 
   shuffle (array) {
+    // Code from https://stackoverflow.com/a/2450976/3287963
     let currentIndex = array.length, temporaryValue, randomIndex
 
     while (0 !== currentIndex) {
