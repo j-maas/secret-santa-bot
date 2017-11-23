@@ -1,4 +1,5 @@
 const Markup = require('telegraf/markup')
+const TelegramError = require('telegraf/core/network/error')
 
 class SecretSantaHandler {
   constructor () {
@@ -56,10 +57,18 @@ class SecretSantaHandler {
 
   async updateStatusMessage (ctx, inline_message_id, isClosed) {
     const message = this.getStatusMessage(isClosed)
-    await ctx.telegram.callApi('editMessageText', Object.assign({
-      inline_message_id: inline_message_id,
-      text: message.messageText,
-    }, message.markup.extra()))
+    try {
+      await ctx.telegram.callApi('editMessageText', Object.assign({
+        inline_message_id: inline_message_id,
+        text: message.messageText,
+      }, message.markup.extra()))
+    } catch (e) {
+      if (e instanceof TelegramError && e.response.description === 'Bad Request: message is not modified') {
+        console.warn("Ignored failed edit: ", e)
+      } else {
+        throw e
+      }
+    }
   }
 
   getStatusMessage (isClosed) {
