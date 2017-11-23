@@ -4,8 +4,8 @@ const {SecretSantaHandler} = require('./secretSantaHandler')
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
 
-bot.use(this.log_middleware)
-bot.use(this.catch_error)
+bot.use(log_middleware)
+bot.use(catch_error)
 
 const handler = new SecretSantaHandler()
 handler.registerToBot(bot)
