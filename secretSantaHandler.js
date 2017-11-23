@@ -76,12 +76,27 @@ class SecretSantaHandler {
   }
 
   getUsersList() {
-    return this.users.map(user => '\t - ' + user.first_name).join('\n')
+    return this.users.map(user => `\t - ${this.getUserName(user)}`).join('\n')
+  }
+
+  getUserName(user) {
+    let output = `${user.first_name}`
+    if (user.last_name) {
+      output += ` ${user.last_name}`
+    }
+    if (user.username) {
+      if (user.username.length > 16) {
+        output += ` (${user.username.substring(0, 16)}…)`
+      } else {
+        output += ` (${user.username.substring(0, 16)})`
+      }
+    }
+    return output
   }
 
   getStatusMessage (isClosed) {
-    const intro = isClosed ? 'Done! The secret santa circle is now closed and has the following members:\n'
-      : 'The secret santa circle has the following members:\n'
+    const intro = isClosed ? `Done! The secret santa circle is now closed and has the following ${this.users.length} members:\n`
+      : `The secret santa circle has the following ${this.users.length} members:\n`
     return {
       messageText: intro +  this.getUsersList(),
       markup: isClosed ? Markup.inlineKeyboard([Markup.urlButton('See your child', 'https://telegram.me/Y0hy0hTestBot?start=child')])
