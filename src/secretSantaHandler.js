@@ -1,10 +1,10 @@
+const {SecretSantaCircle} = require('./secretSantaCircle')
 const {MessageGenerator} = require('./messageGenerator')
 const TelegramError = require('telegraf/core/network/error')
 
 class SecretSantaHandler {
   constructor () {
-    this.users = []
-    this.matches = {}
+    this.circle = new SecretSantaCircle();
     this.messages = []
   }
 
@@ -18,15 +18,15 @@ class SecretSantaHandler {
   }
 
   async childCommand (ctx) {
-    const currentUserId = ctx.from.id
-    if (Object.keys(this.matches).includes(currentUserId.toString())) {
-      return ctx.reply(`Your child is ${this.matches[currentUserId].first_name}.`)
+    const child = this.circle.getChildOf(ctx.from)
+    if (child) {
+      return ctx.reply(`Your child is ${child.first_name}.`)
     }
   }
 
   async inlineQuery (inlineQuery, answerInlineQuery) {
     const offset = parseInt(inlineQuery.offset) || 0
-    const message = MessageGenerator.getStatusMessage(this.users, false)
+    const message = MessageGenerator.getStatusMessage(this.circle.users, false)
     const responses = [{
       type: 'article',
       id: 1,
@@ -47,10 +47,7 @@ class SecretSantaHandler {
 
   async joinAction (ctx) {
     const user = ctx.from
-    const same_user_in_list = this.users.filter(user => user.id === ctx.from.id)
-    if (same_user_in_list.length === 0) {
-      this.users.push(user)
-    }
+    this.circle.add(user)
     await this.updateAllStatusMessages(ctx, false)
     return ctx.answerCbQuery()
   }
@@ -60,7 +57,7 @@ class SecretSantaHandler {
   }
 
   async updateStatusMessage (ctx, inline_message_id, isClosed) {
-    const message = MessageGenerator.getStatusMessage(this.users, isClosed)
+    const message = MessageGenerator.getStatusMessage(this.circle.users, isClosed)
     try {
       await ctx.telegram.callApi('editMessageText', Object.assign({
         inline_message_id: inline_message_id,
@@ -75,34 +72,11 @@ class SecretSantaHandler {
     }
   }
 
-  shuffle (array) {
-    // Code from https://stackoverflow.com/a/2450976/3287963
-    let currentIndex = array.length, temporaryValue, randomIndex
-
-    while (0 !== currentIndex) {
-      randomIndex = Math.floor(Math.random() * currentIndex)
-      currentIndex -= 1
-
-      temporaryValue = array[currentIndex]
-      array[currentIndex] = array[randomIndex]
-      array[randomIndex] = temporaryValue
-    }
-
-    return array
-  }
-
-  match (toMatch) {
-    const matches = {}
-    toMatch = this.shuffle(toMatch)
-    toMatch.forEach((user, index) => matches[user.id] = toMatch[(index + 1) % toMatch.length])
-    return matches
-  }
-
   async closeCommand (ctx) {
-    this.matches = this.match(Array.from(this.users))
+    this.circle.matchChildren()
 
     await this.updateAllStatusMessages(ctx, true)
-    ctx.reply('Closed the circle with members:\n' + MessageGenerator.getUsersList(this.users))
+    ctx.reply('Closed the circle with members:\n' + MessageGenerator.getUsersList(this.circle.users))
   }
 }
 
