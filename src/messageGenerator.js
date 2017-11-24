@@ -9,7 +9,7 @@ class MessageGenerator {
       }
     } else {
       return {
-        messageText: `The secret santa circle has the following ${users.length} members:\n`,
+        messageText: `The secret santa circle has the following ${users.length} members:\n` + MessageGenerator.getUsersList(users),
         markup: Markup.inlineKeyboard([Markup.callbackButton('Join', 'join')]),
       }
     }
@@ -25,7 +25,7 @@ class MessageGenerator {
       output += ` ${user.last_name}`
     }
     if (user.username) {
-      const maxLength = 16;
+      const maxLength = 16
       if (user.username.length > maxLength) {
         output += ` (${user.username.substring(0, maxLength)}…)`
       } else {
