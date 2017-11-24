@@ -2,12 +2,16 @@ const Markup = require('telegraf/markup')
 
 class MessageGenerator {
   static getStatusMessage (users, isClosed) {
-    const intro = isClosed ? `Done! The secret santa circle is now closed and has the following ${users.length} members:\n`
-      : `The secret santa circle has the following ${users.length} members:\n`
-    return {
-      messageText: intro + MessageGenerator.getUsersList(users),
-      markup: isClosed ? Markup.inlineKeyboard([Markup.urlButton('See your child', 'https://telegram.me/Y0hy0hTestBot?start=child')])
-        : Markup.inlineKeyboard([Markup.callbackButton('Join', 'join')]),
+    if (isClosed) {
+      return {
+        messageText: `Done! The secret santa circle is now closed and has the following ${users.length} members:\n` + MessageGenerator.getUsersList(users),
+        markup: Markup.inlineKeyboard([Markup.urlButton('See your child', 'https://telegram.me/Y0hy0hTestBot?start=child')]),
+      }
+    } else {
+      return {
+        messageText: `The secret santa circle has the following ${users.length} members:\n`,
+        markup: Markup.inlineKeyboard([Markup.callbackButton('Join', 'join')]),
+      }
     }
   }
 
@@ -21,10 +25,11 @@ class MessageGenerator {
       output += ` ${user.last_name}`
     }
     if (user.username) {
-      if (user.username.length > 16) {
-        output += ` (${user.username.substring(0, 16)}…)`
+      const maxLength = 16;
+      if (user.username.length > maxLength) {
+        output += ` (${user.username.substring(0, maxLength)}…)`
       } else {
-        output += ` (${user.username.substring(0, 16)})`
+        output += ` (${user.username.substring(0, maxLength)})`
       }
     }
     return output
