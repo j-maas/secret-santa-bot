@@ -9,6 +9,10 @@
   },
   "author": "",
   "dependencies": {
-    "telegraf": "^3.16.3"
+    "express": "^4.16.2",
+    "telegraf": "^3.16.4"
+  },
+  "engines": {
+    "node": "8.9.1"
   }
 }
