@@ -13,7 +13,11 @@ E. g., if your token is `123:ABC`, run:
 BOT_TOKEN="123:ABC" npm start
 ```
 
+You have to activate the [inline mode] as well as
+[100% inline feedback][inline feedback] for your bot to work properly.
 
 [Node.js]: https://nodejs.org/en/
 [Bots]: https://core.telegram.org/bots
 [generate token]: https://core.telegram.org/bots#generating-an-authorization-token
+[inline mode]: https://core.telegram.org/bots/inline
+[inline feedback]: https://core.telegram.org/bots/inline#collecting-feedback
