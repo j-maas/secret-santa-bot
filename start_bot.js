@@ -2,13 +2,13 @@ const Telegraf = require('telegraf')
 const util = require('util')
 const {SecretSantaHandler} = require('./src/secretSantaHandler')
 
-const startBot = function () {
+const startBot = async function () {
   const bot = new Telegraf(process.env.BOT_TOKEN)
   bot.use(log_middleware)
   bot.use(catch_error)
 
   const handler = new SecretSantaHandler()
-  handler.registerToBot(bot)
+  await handler.registerToBot(bot)
 
   bot.startPolling()
   console.log('Your bot is polling.')

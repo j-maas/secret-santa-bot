@@ -8,13 +8,16 @@ class SecretSantaHandler {
     this.messages = []
   }
 
-  registerToBot (bot) {
+  async registerToBot (bot) {
     bot.start(async (ctx) => {if (ctx.chat.type === 'private') return this.childCommand(ctx)})
     bot.command('child', this.childCommand)
     bot.on('inline_query', ({inlineQuery, answerInlineQuery}) => this.inlineQuery(inlineQuery, answerInlineQuery))
     bot.on('chosen_inline_result', ({chosenInlineResult}) => this.chosenInlineResult(chosenInlineResult))
     bot.action('join', (ctx) => this.joinAction(ctx))
     bot.command('close', (ctx) => this.closeCommand(ctx))
+
+    const me = await bot.telegram.getMe()
+    this.botName = me.first_name
   }
 
   async childCommand (ctx) {
@@ -26,7 +29,7 @@ class SecretSantaHandler {
 
   async inlineQuery (inlineQuery, answerInlineQuery) {
     const offset = parseInt(inlineQuery.offset) || 0
-    const message = MessageGenerator.getStatusMessage(this.circle.users, false)
+    const message = MessageGenerator.getStatusMessage(this.circle.users, false, this.botName)
     const responses = [{
       type: 'article',
       id: 1,
@@ -57,7 +60,7 @@ class SecretSantaHandler {
   }
 
   async updateStatusMessage (ctx, inline_message_id, isClosed) {
-    const message = MessageGenerator.getStatusMessage(this.circle.users, isClosed)
+    const message = MessageGenerator.getStatusMessage(this.circle.users, isClosed, this.botName)
     try {
       await ctx.telegram.callApi('editMessageText', Object.assign({
         inline_message_id: inline_message_id,

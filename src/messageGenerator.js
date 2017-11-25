@@ -1,11 +1,11 @@
 const Markup = require('telegraf/markup')
 
 class MessageGenerator {
-  static getStatusMessage (users, isClosed) {
+  static getStatusMessage (users, isClosed, botName) {
     if (isClosed) {
       return {
         messageText: `Done! The secret santa circle is now closed and has the following ${users.length} members:\n` + MessageGenerator.getUsersList(users),
-        markup: Markup.inlineKeyboard([Markup.urlButton('See your child', 'https://telegram.me/Y0hy0hTestBot?start=child')]),
+        markup: Markup.inlineKeyboard([Markup.urlButton('See your child', `https://telegram.me/${botName}?start=child`)]),
       }
     } else {
       return {
