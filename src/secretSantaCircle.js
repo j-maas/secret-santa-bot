@@ -13,7 +13,7 @@ class SecretSantaCircle {
   }
 
   add (user) {
-    if (!this.users.includes(user)) {
+    if (!this.users.find(u => u.id === user.id)) {
       this.users.push(user)
     }
   }
