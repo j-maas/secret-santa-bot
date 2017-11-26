@@ -12,10 +12,10 @@ const startBot = async function () {
   await handler.registerToBot(bot)
 
   const domain = process.env.PROJECT_DOMAIN
-  const host = `${domain}.glitch.me/`
+  const host = `${domain}.glitch.me`
   const port = 8443
-  const pathToFetchFrom = `bot/${token}`
-  await bot.telegram.setWebhook(`https://${host}/${pathToFetchFrom}`)
+  const pathToFetchFrom = `/bot/${token}`
+  await bot.telegram.setWebhook(`https://${host}${pathToFetchFrom}`)
   bot.startWebhook(`/`, null, port, 'localhost')
   console.log(`Your bot is listening on port ${port}.`)
 

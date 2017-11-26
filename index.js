@@ -5,12 +5,12 @@ const proxy = require('express-http-proxy')
 
 startServer()
 
-function startServer () {
+async function startServer () {
   // Static website
   app.use(express.static('public'))
 
   // Bot webhooks redirect
-  const {pathToFetchFrom, urlToRedirectTo} = startBot()
+  const {pathToFetchFrom, urlToRedirectTo} = await startBot()
   app.use(pathToFetchFrom, proxy(urlToRedirectTo))
 
   const listener = app.listen(process.env.PORT, function () {
