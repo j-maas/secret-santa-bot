@@ -17,7 +17,7 @@ class SecretSantaHandler {
     bot.command('close', (ctx) => this.closeCommand(ctx))
 
     const me = await bot.telegram.getMe()
-    this.botName = me.first_name
+    this.botName = me.username
   }
 
   async childCommand (ctx) {
