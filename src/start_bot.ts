@@ -1,6 +1,7 @@
+import { SecretSantaHandler } from './bot/secretSantaHandler'
+
 const Telegraf = require('telegraf')
 const util = require('util')
-const {SecretSantaHandler} = require('./bot/secretSantaHandler')
 
 export async function startBot() {
     const token = process.env.BOT_TOKEN

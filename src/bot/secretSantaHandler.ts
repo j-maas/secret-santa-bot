@@ -8,9 +8,10 @@ export class SecretSantaHandler {
     private messages: Array<string> = []
     private botName: string
 
-    static async createWith(bot): SecretSantaHandler {
+    static async createWith(bot): Promise<SecretSantaHandler> {
         const handler = new SecretSantaHandler();
-        return handler.registerToBot(bot);
+        await handler.registerToBot(bot);
+        return handler;
     }
 
     async registerToBot(bot) {
