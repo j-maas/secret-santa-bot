@@ -5,7 +5,7 @@ const util = require('util')
 
 export async function startBot() {
     const token = process.env.BOT_TOKEN
-    const bot = new Telegraf(token)
+    const bot = new Telegraf(token) as any
     bot.use(log_middleware)
     bot.use(catch_error)
 

@@ -1,14 +1,16 @@
+import Telegraf, { ContextMessageUpdate } from 'telegraf/typings'
+import { ChosenInlineResult, InlineQuery } from 'telegraf/typings/telegram-types'
 import { MessageGenerator } from './messageGenerator'
 import { SecretSantaCircle } from './secretSantaCircle'
 
-const TelegramError = require('telegraf/core/network/error')
+import TelegramError from 'telegraf/core/network/error'
 
 export class SecretSantaHandler {
     private circle = new SecretSantaCircle()
     private messages: Array<string> = []
     private botName: string
 
-    static async createWith(bot): Promise<SecretSantaHandler> {
+    static async createWith(bot: Telegraf<ContextMessageUpdate>): Promise<SecretSantaHandler> {
         const handler = new SecretSantaHandler();
         await handler.registerToBot(bot);
         return handler;
@@ -26,14 +28,14 @@ export class SecretSantaHandler {
         this.botName = me.username
     }
 
-    async childCommand(ctx) {
+    async childCommand(ctx: ContextMessageUpdate) {
         const child = this.circle.getChildOf(ctx.from)
         if (child) {
             return ctx.reply(`Your child is ${child.first_name}.`)
         }
     }
 
-    async inlineQuery(inlineQuery, answerInlineQuery) {
+    async inlineQuery(inlineQuery: InlineQuery, answerInlineQuery) {
         const offset = parseInt(inlineQuery.offset) || 0
         const message = MessageGenerator.getStatusMessage(this.circle.users, false, this.botName)
         const responses = [
@@ -44,7 +46,7 @@ export class SecretSantaHandler {
                 input_message_content: {
                     message_text: message.messageText,
                 },
-                reply_markup: message.markup,
+                reply_markup: message.inlineKeyboard,
             },
         ]
 
@@ -52,28 +54,28 @@ export class SecretSantaHandler {
         return answerInlineQuery(results, {next_offset: offset + results.length, cache_time: 0})
     }
 
-    async chosenInlineResult(chosenInlineResult) {
+    async chosenInlineResult(chosenInlineResult: ChosenInlineResult) {
         this.messages.push(chosenInlineResult.inline_message_id)
     }
 
-    async joinAction(ctx) {
+    async joinAction(ctx: ContextMessageUpdate) {
         const user = ctx.from
         this.circle.add(user)
         await this.updateAllStatusMessages(ctx, false)
-        return ctx.answerCbQuery()
+        return ctx.answerCallbackQuery()
     }
 
-    async updateAllStatusMessages(ctx, isClosed) {
+    async updateAllStatusMessages(ctx: ContextMessageUpdate, isClosed: boolean) {
         this.messages.forEach(inline_message_id => this.updateStatusMessage(ctx, inline_message_id, isClosed))
     }
 
-    async updateStatusMessage(ctx, inline_message_id, isClosed) {
+    async updateStatusMessage(ctx, inline_message_id: string, isClosed: boolean) {
         const message = MessageGenerator.getStatusMessage(this.circle.users, isClosed, this.botName)
         try {
             await ctx.telegram.callApi('editMessageText', Object.assign({
                                                                             inline_message_id: inline_message_id,
                                                                             text: message.messageText,
-                                                                        }, message.markup.extra()))
+                                                                        }, message.inlineKeyboard.extra()))
         } catch (e) {
             if (e instanceof TelegramError && e.response.description === 'Bad Request: message is not modified') {
                 console.warn('Ignored failed edit: ', e)
@@ -83,10 +85,10 @@ export class SecretSantaHandler {
         }
     }
 
-    async closeCommand(ctx) {
+    async closeCommand(ctx: ContextMessageUpdate) {
         this.circle.matchChildren()
 
         await this.updateAllStatusMessages(ctx, true)
-        ctx.reply('Closed the circle with members:\n' + MessageGenerator.getUsersList(this.circle.users))
+        await ctx.reply('Closed the circle with members:\n' + MessageGenerator.getUsersList(this.circle.users))
     }
 }

@@ -1,8 +1,10 @@
+import { User } from 'telegraf/typings/telegram-types'
+
 export class SecretSantaCircle {
-    users = []
+    users: Array<User> = []
     matches = null
 
-    getChildOf(user) {
+    getChildOf(user: User): User {
         if (this.matches) {
             return this.matches[user.id]
         } else {
@@ -10,20 +12,20 @@ export class SecretSantaCircle {
         }
     }
 
-    add(user) {
+    add(user: User) {
         if (!this.users.find(u => u.id === user.id)) {
             this.users.push(user)
         }
     }
 
     matchChildren() {
-        this.matches = this.match(this.users)
+        this.matches = this.createMatch(this.users)
     }
 
-    match(toMatch) {
+    createMatch(toMatch: Array<User>): object {
         const matches = {}
-        toMatch = this.shuffle(toMatch)
-        toMatch.forEach((user, index) => matches[user.id] = toMatch[(index + 1) % toMatch.length])
+        const shuffled = this.shuffle(toMatch)
+        shuffled.forEach((user, index) => matches[user.id] = shuffled[(index + 1) % shuffled.length])
         return matches
     }
 

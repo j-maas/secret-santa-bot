@@ -1,7 +1,9 @@
+import { User } from 'telegraf/typings/telegram-types'
+
 const Markup = require('telegraf/markup')
 
 export class MessageGenerator {
-    static getStatusMessage(users, isClosed: boolean, botName: string): MessageTemplate {
+    static getStatusMessage(users: Array<User>, isClosed: boolean, botName: string): MessageTemplate {
         if (isClosed) {
             return new MessageTemplate(
                 `Done! The secret santa circle is now closed`
@@ -23,11 +25,11 @@ export class MessageGenerator {
         }
     }
 
-    static getUsersList(users): string {
+    static getUsersList(users: Array<User>): string {
         return users.map(user => `\t - ${MessageGenerator.getUserName(user)}`).join('\n')
     }
 
-    static getUserName(user): string {
+    static getUserName(user: User): string {
         let output = `${user.first_name}`
         if (user.last_name) {
             output += ` ${user.last_name}`
@@ -47,6 +49,6 @@ export class MessageGenerator {
 export class MessageTemplate {
     constructor(
         public messageText: string,
-        public markup,
+        public inlineKeyboard,
     ) {}
 }
