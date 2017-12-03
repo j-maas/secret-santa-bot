@@ -1,11 +1,12 @@
+import { Express } from 'express';
+import { startBot } from './start_bot';
+
 const express = require('express');
-const {startBot} = require('./start_bot');
 const proxy = require('express-http-proxy');
 
-const app = express();
-startServer();
+startServer(express());
 
-async function startServer() {
+async function startServer(app: Express) {
     // Static website
     app.use(express.static('./public'));
 
