@@ -8,8 +8,7 @@ export async function startBot() {
     bot.use(log_middleware)
     bot.use(catch_error)
 
-    const handler = new SecretSantaHandler()
-    await handler.registerToBot(bot)
+    await SecretSantaHandler.createWith(bot);
 
     const domain = process.env.PROJECT_DOMAIN
     const host = `${domain}.glitch.me`

@@ -8,6 +8,11 @@ export class SecretSantaHandler {
     private messages: Array<string> = []
     private botName: string
 
+    static async createWith(bot): SecretSantaHandler {
+        const handler = new SecretSantaHandler();
+        return handler.registerToBot(bot);
+    }
+
     async registerToBot(bot) {
         bot.start(async (ctx) => {if (ctx.chat.type === 'private') return this.childCommand(ctx)})
         bot.command('child', this.childCommand)
