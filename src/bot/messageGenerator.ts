@@ -1,30 +1,31 @@
 const Markup = require('telegraf/markup');
 
 export class MessageGenerator {
-    static getStatusMessage(users, isClosed, botName) {
+    static getStatusMessage(users, isClosed: boolean, botName: string): MessageTemplate {
         if (isClosed) {
-            return {
-                messageText: `Done! The secret santa circle is now closed and has the following ${users.length} members:\n` + MessageGenerator.getUsersList(
-                    users),
-                markup: Markup.inlineKeyboard([Markup.urlButton(
+            return new MessageTemplate(
+                `Done! The secret santa circle is now closed`
+                + ` and has the following ${users.length} members:\n`
+                + MessageGenerator.getUsersList(users),
+                Markup.inlineKeyboard([Markup.urlButton(
                     'See your child',
                     `https://telegram.me/${botName}?start=child`,
                 )]),
-            };
+            );
         } else {
-            return {
-                messageText: `The secret santa circle has the following ${users.length} members:\n` + MessageGenerator.getUsersList(
-                    users),
-                markup: Markup.inlineKeyboard([Markup.callbackButton('Join', 'join')]),
-            };
+            return new MessageTemplate(
+                `The secret santa circle has the following ${users.length} members:\n`
+                + MessageGenerator.getUsersList(users),
+                Markup.inlineKeyboard([Markup.callbackButton('Join', 'join')]),
+            );
         }
     }
 
-    static getUsersList(users) {
+    static getUsersList(users): string {
         return users.map(user => `\t - ${MessageGenerator.getUserName(user)}`).join('\n');
     }
 
-    static getUserName(user) {
+    static getUserName(user): string {
         let output = `${user.first_name}`;
         if (user.last_name) {
             output += ` ${user.last_name}`;
@@ -39,4 +40,11 @@ export class MessageGenerator {
         }
         return output;
     }
+}
+
+export class MessageTemplate {
+    constructor(
+        public messageText: string,
+        public markup,
+    ) {}
 }

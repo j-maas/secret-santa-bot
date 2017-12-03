@@ -27,7 +27,7 @@ export class SecretSantaCircle {
         return matches;
     }
 
-    shuffle(array) {
+    shuffle<T>(array: Array<T>): Array<T> {
         // Code from https://stackoverflow.com/a/2450976/3287963
         let currentIndex = array.length, temporaryValue, randomIndex;
 
