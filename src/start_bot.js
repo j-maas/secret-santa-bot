@@ -1,6 +1,6 @@
 const Telegraf = require('telegraf')
 const util = require('util')
-const {SecretSantaHandler} = require('./src/secretSantaHandler')
+const {SecretSantaHandler} = require('./bot/secretSantaHandler')
 
 const startBot = async function () {
   const token = process.env.BOT_TOKEN

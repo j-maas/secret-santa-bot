@@ -2,9 +2,8 @@
   "name": "secret-santa",
   "version": "0.1.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "ts-node ./src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -15,5 +14,11 @@
   },
   "engines": {
     "node": "8.9.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.0.39",
+    "@types/node": "^8.0.54",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.6.2"
   }
 }
