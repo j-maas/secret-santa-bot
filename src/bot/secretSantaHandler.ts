@@ -1,19 +1,18 @@
-import Telegraf, { ContextMessageUpdate } from 'telegraf/typings'
+import TelegramError from 'telegraf/core/network/error'
+import { ContextMessageUpdate } from 'telegraf/typings'
 import { ChosenInlineResult, InlineQuery } from 'telegraf/typings/telegram-types'
 import { MessageGenerator } from './messageGenerator'
 import { SecretSantaCircle } from './secretSantaCircle'
-
-import TelegramError from 'telegraf/core/network/error'
 
 export class SecretSantaHandler {
     private circle = new SecretSantaCircle()
     private messages: Array<string> = []
     private botName: string
 
-    static async createWith(bot: Telegraf<ContextMessageUpdate>): Promise<SecretSantaHandler> {
-        const handler = new SecretSantaHandler();
-        await handler.registerToBot(bot);
-        return handler;
+    static async createWith(bot): Promise<SecretSantaHandler> {
+        const handler = new SecretSantaHandler()
+        await handler.registerToBot(bot)
+        return handler
     }
 
     async registerToBot(bot) {
