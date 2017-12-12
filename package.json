@@ -18,7 +18,14 @@
   "devDependencies": {
     "@types/express": "^4.0.39",
     "@types/node": "^8.0.54",
+    "eslint-plugin-typescript": "^0.8.1",
+    "standard": "^10.0.3",
     "ts-node": "^3.3.0",
-    "typescript": "^2.6.2"
+    "typescript": "^2.6.2",
+    "typescript-eslint-parser": "^10.0.0"
+  },
+  "standard": {
+    "parser": "typescript-eslint-parser",
+    "plugins": [ "typescript" ]
   }
 }
