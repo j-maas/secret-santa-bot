@@ -2,6 +2,7 @@
 
 [![Telegram @santasSecretBot](https://img.shields.io/badge/Telegram-%40santasSecretBot-blue.svg)](https://t.me/santasSecretBot)
 [![Glitch santas-secret-bot](https://img.shields.io/badge/Glitch-santas--secret--bot-fa6972.svg)](https://santas-secret-bot.glitch.me)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://github.com/standard/standard)
 
 A Telegram bot for organizing secret santa gatherings.
 
