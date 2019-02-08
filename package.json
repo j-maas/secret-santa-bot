@@ -10,7 +10,7 @@
   "dependencies": {
     "express": "^4.16.2",
     "express-http-proxy": "^1.1.0",
-    "telegraf": "telegraf/telegraf#feature/typings"
+    "telegraf": "^3.27.1"
   },
   "engines": {
     "node": "8.9.1"
@@ -26,6 +26,8 @@
   },
   "standard": {
     "parser": "typescript-eslint-parser",
-    "plugins": [ "typescript" ]
+    "plugins": [
+      "typescript"
+    ]
   }
 }
