@@ -8,21 +8,21 @@
   },
   "author": "",
   "dependencies": {
-    "express": "^4.16.2",
+    "express": "^4.17.1",
     "express-http-proxy": "^1.1.0",
-    "telegraf": "^3.27.1"
+    "telegraf": "^3.32.0"
   },
   "engines": {
     "node": "8.9.1"
   },
   "devDependencies": {
-    "@types/express": "^4.0.39",
-    "@types/node": "^8.0.54",
-    "eslint-plugin-typescript": "^0.8.1",
-    "standard": "^10.0.3",
-    "ts-node": "^3.3.0",
-    "typescript": "^2.6.2",
-    "typescript-eslint-parser": "^10.0.0"
+    "@types/express": "^4.17.0",
+    "@types/node": "^12.7.1",
+    "eslint-plugin-typescript": "^0.14.0",
+    "standard": "^13.1.0",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.3",
+    "typescript-eslint-parser": "^22.0.0"
   },
   "standard": {
     "parser": "typescript-eslint-parser",
